@@ -16,34 +16,43 @@ DATA_FILE_RELATIVE_PATH = "creds/saved_credentials.csv"
 
 # ---------------------------- LOAD SAVED CREDENTIALS ------------------------------- #
 # Here, we load all the saved credentials from the data file, to appropriate Python data structures
-with open( os.path.join( os.path.dirname(__file__), DATA_FILE_RELATIVE_PATH ) ) as data_file:
-    creds_data = csv.reader( data_file )
-    # websites_list will be a Python list, that will contain all the websites in ascending order.
-    websites_list = []
+try:
+    with open( os.path.join( os.path.dirname(__file__), DATA_FILE_RELATIVE_PATH ) ) as data_file:
+        creds_data = csv.reader( data_file )
+        # websites_list will be a Python list, that will contain all the websites in ascending order.
+        websites_list = []
 
-    # credentials_dict will contain user's credentials as a Python dictionary, with following structure:
-    # {
-    #     website1: { "username": username1, "password": password1 },
-    #     website2: { "username": username2, "password": password2 },...
-    # }
-    credentials_dict = dict()
-    
-    for row in creds_data:
-        websites_list.append( row[0] )
-        credentials_dict[ row[0] ] = {
-            "username": row[1],
-            "password": row[2]
-        }
+        # credentials_dict will contain user's credentials as a Python dictionary, with following structure:
+        # {
+        #     website1: { "username": username1, "password": password1 },
+        #     website2: { "username": username2, "password": password2 },...
+        # }
+        credentials_dict = dict()
+        
+        for row in creds_data:
+            if len(row) == 3:
+                # Each row must contain 3 values, else the row will be assumed to be corrupted, thus not added to search datastruture
+                websites_list.append( row[0] )
+                credentials_dict[ row[0] ] = {
+                    "username": row[1],
+                    "password": row[2]
+                }
 
-    # Sorting the websites in ascending order
-    websites_list.sort()
+        # Sorting the websites in ascending order
+        websites_list.sort()
+
+except FileNotFoundError:
+    # If user launches password viewer before storing any credentials
+    print("No credentials found! Store your credentials first...")
+    websites_list=["-- no credentials --"]
+    credentials_dict={None: None}
 
 
 # ---------------------------- SEARCH BUTTON FNCTIONALITY ------------------------- #
 def website_creds_search():
     selected_website = selected_website_var.get()
 
-    if selected_website != "-- SELECT --":
+    if selected_website != "-- SELECT --" and selected_website != "-- no credentials --":
         # When any website is selected from dropdown and then Search is clicked, this code block will run
         username = credentials_dict[selected_website]["username"]
         password = credentials_dict[selected_website]["password"]

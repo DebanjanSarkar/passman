@@ -3,7 +3,7 @@
 
 ## Overview
 ----------------------------------------------------------------
-This password manager is a GUI-program built using the Tkinter module in Python. It provides users with a convenient way to organize and manage their passwords securely, and retrieve them easily whenever required. The password manager stores all passwords locally in a CSV file, ensuring data security.
+This password manager is a GUI-program built using the Tkinter module in Python. It provides users with a convenient way to organize and manage their passwords securely, and retrieve and view them easily whenever required. The password manager stores all passwords locally in a CSV file, ensuring data security for individuals.
 *Though it currently uses local storage to store passwords in a CSV file, it can be simply extended by writing custom functions, to use Encryption, and Database storage using custom functions and ORMs/connectors.*
 
 
